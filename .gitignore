@@ -4,8 +4,9 @@ venv/
 __pycache__/
 *.pyc
 
-# trained artifacts (regenerate with `python -m src.ercot.train_and_save`)
-data/artifacts/*.pkl
+# trained artifacts — kept in repo so Streamlit Cloud can serve Layer 1
+# (regenerate locally with `python -m src.ercot.train_and_save`)
+# data/artifacts/*.pkl
 
 # OS
 .DS_Store
