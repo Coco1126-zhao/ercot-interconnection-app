@@ -1,0 +1,39 @@
+name: Monthly ERCOT GIS Refresh
+
+on:
+  schedule:
+    # Run at 14:00 UTC on the 5th of each month.
+    # ERCOT typically posts the new GIS Report within the first 3 business days.
+    - cron: "0 14 5 * *"
+  workflow_dispatch: {}        # allow manual trigger from Actions tab
+
+permissions:
+  contents: write              # needed to commit the new snapshot back
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install fetcher deps
+        run: pip install requests beautifulsoup4 lxml
+
+      - name: Download newest GIS report
+        run: python -m src.ercot.fetcher
+
+      - name: Commit if changed
+        run: |
+          git config user.name  "ercot-bot"
+          git config user.email "ercot-bot@users.noreply.github.com"
+          git add data/ercot/
+          if ! git diff --staged --quiet; then
+            git commit -m "monthly: ERCOT GIS refresh $(date +%Y-%m-%d)"
+            git push
+          else
+            echo "No new snapshot."
+          fi

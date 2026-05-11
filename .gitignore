@@ -1,0 +1,17 @@
+# venv
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# trained artifacts (regenerate with `python -m src.ercot.train_and_save`)
+data/artifacts/*.pkl
+
+# OS
+.DS_Store
+
+# editor
+.idea/
+
+# big LBNL file is kept in repo for reproducibility — uncomment to exclude
+# data/raw/*.xlsx

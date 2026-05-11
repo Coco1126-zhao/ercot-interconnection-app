@@ -1,0 +1,28 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Streamlit: app_streamlit.py",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "streamlit",
+      "args": ["run", "app/app_streamlit.py"],
+      "console": "integratedTerminal",
+      "justMyCode": false
+    },
+    {
+      "name": "Train + save artifacts",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "src.ercot.train_and_save",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Fetch latest ERCOT GIS",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "src.ercot.fetcher",
+      "console": "integratedTerminal"
+    }
+  ]
+}
