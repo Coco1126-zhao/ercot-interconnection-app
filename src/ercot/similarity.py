@@ -96,13 +96,19 @@ class SimilarityEngine:
         idx = np.argsort(d)[:n]
         out = self.df.iloc[idx].copy()
         out["similarity_distance"] = d[idx].round(3)
-        # Surface useful display columns up front
+
+        # Convert distance → similarity score 0–100% using the queue's max distance
+        # as the "completely dissimilar" anchor.
+        d_max = float(np.max(d)) if len(d) else 1.0
+        out["similarity_pct"] = (1 - d[idx] / max(d_max, 1e-6)) * 100.0
+        out["similarity_pct"] = out["similarity_pct"].clip(lower=0, upper=100).round(1)
+
         cols = [
             "INR", "Project Name", "fuel_label", "capacity_mw",
             "County", "CDR Reporting Zone",
             "queue_entry_date", "Projected COD",
             "current_stage", "progress_pct", "months_in_queue",
-            "similarity_distance",
+            "similarity_distance", "similarity_pct",
         ]
         return out[[c for c in cols if c in out.columns]].reset_index(drop=True)
 
